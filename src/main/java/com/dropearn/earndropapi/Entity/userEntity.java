@@ -1,9 +1,6 @@
 package com.dropearn.earndropapi.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,4 +20,11 @@ public class userEntity{
     private String email;
     private String password;
     private String tonWalletAddress;
+    @Column(name = "level", nullable = false)
+    private String level;
+
+    @PrePersist
+    void preInsert(){
+        if (this.level==null) this.level="bronze"; // user has three level bronze,silver,gold
+    }
 }
