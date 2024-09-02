@@ -1,14 +1,16 @@
 package com.dropearn.earndropapi.controller;
 
 import com.dropearn.earndropapi.Entity.userEntity;
+import com.dropearn.earndropapi.emailService.EmailService;
+import com.dropearn.earndropapi.emailService.EmailServiceImpl;
 import com.dropearn.earndropapi.service.userService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class loginController {
-
     private final userService service;
 
     public loginController(userService service) {
@@ -18,6 +20,9 @@ public class loginController {
 
     @GetMapping("/user/{email}")
     public userEntity user(@PathVariable("email") String email) {
+        EmailServiceImpl impl = new EmailServiceImpl();
+        String mess = impl.sendSimpleEmail(email,"Test Subject","Test body");
+        System.out.println(mess);
         return service.getuserbyEmail(email);
     }
     @GetMapping("/getAllUser")
@@ -37,6 +42,7 @@ public class loginController {
     public String deleteUser(@PathVariable("id") Integer id) {
         return service.deleteUserByEmail(id);
     }
+
 
 
 

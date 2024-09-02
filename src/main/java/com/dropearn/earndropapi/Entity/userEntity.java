@@ -17,11 +17,13 @@ public class userEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
+    @Column(name = "email",unique = true)
     private String email;
     private String password;
     private String tonWalletAddress;
     @Column(name = "level", nullable = false)
     private String level;
+    private boolean newsletter;
 
     @PrePersist
     void preInsert(){
