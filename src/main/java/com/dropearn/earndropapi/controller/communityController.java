@@ -1,7 +1,12 @@
 package com.dropearn.earndropapi.controller;
 
+import com.dropearn.earndropapi.Entity.userEntity;
 import com.dropearn.earndropapi.Entity.walletCommunityEntity;
+import com.dropearn.earndropapi.emailService.EmailServiceImpl;
+import com.dropearn.earndropapi.emailService.newsletter;
 import com.dropearn.earndropapi.service.communityService;
+import com.dropearn.earndropapi.service.userService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,15 +15,33 @@ import java.util.List;
 @RequestMapping("/api/wallet")
 public class communityController {
     final communityService service;
+    final userService userservice;
 
-    public communityController(communityService service) {
+    @Autowired
+    private EmailServiceImpl emailService;
+
+    public communityController(communityService service, userService userservice) {
         this.service = service;
+        this.userservice = userservice;
     }
 
     @PostMapping("/create")
-    public String createNewPost(@RequestBody walletCommunityEntity entity){
-        return service.save(entity);
+    public walletCommunityEntity createNewPost(@RequestBody walletCommunityEntity entity){
+            Runnable runnable = () -> {
+                System.out.println("Invoke");
+                List<userEntity> list = userservice.getallUser();
+                newsletter newsletter = new newsletter(emailService);
+                newsletter.sendnewsLetter(list,entity);
+            };
+            runnable.run();
+            try{
+        service.save(entity);
+            }catch (Exception e){
+                e.fillInStackTrace();
+            }
+        return entity;
     }
+
 
     @GetMapping("/getAll")
     public List<walletCommunityEntity> getAll(){

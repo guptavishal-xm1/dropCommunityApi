@@ -16,9 +16,11 @@ public class walletCommunityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    private String title;
     private String imageUrl;
     private String poolName;
     private String description;
     private String poolLink;
+    private boolean forNewsletter;
 
 }
